@@ -1,29 +1,30 @@
-import ToDoList from "./todolist.js";
-import ToDoItem from "./todoitem.js";
-
+import ToDoList from './todolist.js';
+import ToDoItem from './todoitem.js';
 
 const toDoList = new ToDoList();
 
 //launch app
-document.addEventListener("readystatechange", (event) => {
-	if (event.target.readyState === "complete") {
+document.addEventListener('readystatechange', (event) => {
+	if (event.target.readyState === 'complete') {
 		initApp();
 	}
 });
 
 const initApp = () => {
 	//add listeners
-	const itemEntryForm = document.getElementById("itemEntryForm");
-	itemEntryForm.addEventListener("submit", (event) => {
+	const itemEntryForm = document.getElementById('itemEntryForm');
+	itemEntryForm.addEventListener('submit', (event) => {
 		event.preventdefault();
 		processSubmission();
 	});
 
-	const clearItems = document.getElementById("clearItems");
-	clearItems.addEventListener("click", (event) => {
+	const clearItems = document.getElementById('clearItems');
+	clearItems.addEventListener('click', (event) => {
 		const list = toDoList.getList();
 		if (list.length) {
-			const confirmed = confirm("are you sure you want to clear the entire list?");
+			const confirmed = confirm(
+				'are you sure you want to clear the entire list?'
+			);
 			if (confirmed) {
 				toDoList.clearList();
 				updatePersistentData(toDoList.getList());
@@ -37,11 +38,11 @@ const initApp = () => {
 	refreshThePage();
 };
 
-const loadListObject = () => { 
-	const storedList = localStorage.getItem("myToDoList");
-	if (typeof storedList !== "string") return;
+const loadListObject = () => {
+	const storedList = localStorage.getItem('myToDoList');
+	if (typeof storedList !== 'string') return;
 	const parsedList = JSON.parse(storedList);
-	parsedList.forEach(itemObj => {
+	parsedList.forEach((itemObj) => {
 		const newToDoItem = createNewItem(itemObj._id, itemObj._item);
 		toDoList.addItemToList(newToDoItem);
 	});
@@ -55,7 +56,7 @@ const refreshThePage = () => {
 };
 
 const clearListDisplay = () => {
-	const parentElement = document.getElementById("listItems");
+	const parentElement = document.getElementById('listItems');
 	deleteContents(parentElement);
 };
 
@@ -70,30 +71,30 @@ const deleteContents = (parentElement) => {
 const renderList = () => {
 	const list = toDoList.getList();
 
-	list.forEach(item => {
+	list.forEach((item) => {
 		buildListItem(item);
 	});
 };
 
 const buildListItem = (item) => {
-	const div = document.createElement("div");
-	div.clasName = "item";
-	const check = document.createElement("input");
-	check.type = "checkbox";
+	const div = document.createElement('div');
+	div.clasName = 'item';
+	const check = document.createElement('input');
+	check.type = 'checkbox';
 	check.id = item.getId();
 	check.tabIndex = 0;
 	addClickListenerToCheckBox(check);
-	const label = document.createElement("label");
+	const label = document.createElement('label');
 	label.html = item.getId();
 	label.textContent = item.getItem();
 	div.appentChild(check);
 	div.appentChild(label);
-	const container = document.getElementById("listItems");
+	const container = document.getElementById('listItems');
 	Container.appentChild(div);
 };
 
 const addClickListenerToCheckBox = (checkbox) => {
-	checkbox.addEventListener("click", (event) => {
+	checkbox.addEventListener('click', (event) => {
 		toDoList.removeItemFromList(checkbox.id);
 		updatePersistentData(toDoList.getList());
 		setTimeout(() => {
@@ -103,15 +104,15 @@ const addClickListenerToCheckBox = (checkbox) => {
 };
 
 const updatepersistentData = (listArray) => {
-	localStorage.setItem("myToDoList", JSON.stringify(listArray));
+	localStorage.setItem('myToDoList', JSON.stringify(listArray));
 };
 
 const clearItemEntryField = () => {
-	document.getElementById("newItem").value = "";
+	document.getElementById('newItem').value = '';
 };
 
 const setFocusOnItemEntry = () => {
-	document.getElementById("newItem").focus();
+	document.getElementById('newItem').focus();
 };
 
 const processSubmission = () => {
@@ -121,13 +122,12 @@ const processSubmission = () => {
 	const nextItemId = calcNextItemId();
 	const toDoItem = createNewItem(nextItemId, newEntryText);
 	toDoList.addItemToList(toDoItem);
-	updatePersistentData(toDoList.getList()); 
+	updatePersistentData(toDoList.getList());
 	refreshThePage();
 };
 
 const getNewEntry = () => {
-	return document.getElementById("newItem").value.trim();
-
+	return document.getElementById('newItem').value.trim();
 };
 
 const calcNextItemId = () => {
